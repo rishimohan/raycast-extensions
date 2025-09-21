@@ -35,7 +35,7 @@ export default async function Command(props: LaunchProps) {
   });
 
   try {
-    const preferences = getPreferenceValues();
+    const preferences = getPreferenceValues<Preferences>();
 
     const response = await fetch("https://orshot.com/api/templates/make-playground-request", {
       method: "POST",
