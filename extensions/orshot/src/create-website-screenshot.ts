@@ -10,7 +10,7 @@ interface ApiResponse {
   error?: string;
 }
 
-export default async function Command(props: LaunchProps<{arguments: Arguments.CreateWebsiteScreenshot}>) {
+export default async function Command(props: LaunchProps<{ arguments: Arguments.CreateWebsiteScreenshot }>) {
   let { websiteUrl } = props.arguments;
 
   if (!websiteUrl || websiteUrl.trim() === "") {

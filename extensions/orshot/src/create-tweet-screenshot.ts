@@ -10,7 +10,7 @@ interface ApiResponse {
   error?: string;
 }
 
-export default async function Command(props: LaunchProps<{ arguments: Arguments.CreateTweetScreenshot}>) {
+export default async function Command(props: LaunchProps<{ arguments: Arguments.CreateTweetScreenshot }>) {
   let { tweetUrl } = props.arguments;
 
   if (!tweetUrl || tweetUrl.trim() === "") {
