@@ -52,6 +52,14 @@
       "description": "Your Orshot API key (optional - without it you'll have rate limits)",
       "type": "password",
       "required": false
+    },
+    {
+      "name": "saveDirectory",
+      "title": "Save Directory",
+      "description": "Directory where screenshots will be saved",
+      "type": "directory",
+      "required": false,
+      "default": "~/Desktop"
     }
   ],
   "dependencies": {

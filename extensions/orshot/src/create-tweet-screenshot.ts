@@ -1,20 +1,7 @@
-import {
-  showToast,
-  Toast,
-  getPreferenceValues,
-  LaunchProps,
-} from "@raycast/api";
+import { showToast, Toast, getPreferenceValues, LaunchProps } from "@raycast/api";
 import { writeFileSync } from "fs";
 import { join } from "path";
 import { homedir } from "os";
-
-interface Preferences {
-  apiKey?: string;
-}
-
-interface Arguments {
-  tweetUrl: string;
-}
 
 interface ApiResponse {
   data?: {
@@ -23,9 +10,7 @@ interface ApiResponse {
   error?: string;
 }
 
-export default async function Command(
-  props: LaunchProps<{ arguments: Arguments }>,
-) {
+export default async function Command(props: LaunchProps) {
   let { tweetUrl } = props.arguments;
 
   if (!tweetUrl || tweetUrl.trim() === "") {
@@ -50,27 +35,25 @@ export default async function Command(
   });
 
   try {
-    const preferences = getPreferenceValues<Preferences>();
+    const preferences = getPreferenceValues();
 
-    const response = await fetch(
-      "https://orshot.com/api/templates/make-playground-request",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          templateSlug: "tweet-image",
-          modifications: {
-            tweetUrl: tweetUrl,
-          },
-          userAPIKey: preferences.apiKey,
-          responseType: "base64",
-          responseFormat: "png",
-          renderType: "images",
-        }),
+    const response = await fetch("https://orshot.com/api/templates/make-playground-request", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify({
+        templateSlug: "tweet-image",
+        modifications: {
+          tweetUrl: tweetUrl,
+        },
+        userAPIKey: preferences.apiKey,
+        responseType: "base64",
+        responseFormat: "png",
+        renderType: "images",
+        source: "raycast-extension",
+      }),
+    });
 
     const data = (await response.json()) as ApiResponse;
 
@@ -88,26 +71,25 @@ export default async function Command(
       throw new Error("Invalid image data format");
     }
 
-    // Convert base64 to buffer and save to desktop
+    // Convert base64 to buffer and save to specified directory
     const imageBuffer = Buffer.from(base64Data, "base64");
-    const desktopPath = join(homedir(), "Desktop");
+    const saveDirectory = preferences.saveDirectory || join(homedir(), "Desktop");
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     const filename = `tweet-screenshot-${timestamp}.png`;
-    const filepath = join(desktopPath, filename);
+    const filepath = join(saveDirectory, filename);
 
     writeFileSync(filepath, imageBuffer);
 
     await showToast({
       style: Toast.Style.Success,
       title: "Screenshot Generated",
-      message: `Saved to Desktop as ${filename}`,
+      message: `Saved to ${filename}`,
     });
   } catch (error) {
     await showToast({
       style: Toast.Style.Failure,
       title: "Failed to Generate Screenshot",
-      message:
-        error instanceof Error ? error.message : "Unknown error occurred",
+      message: error instanceof Error ? error.message : "Unknown error occurred",
     });
   }
 }

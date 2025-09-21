@@ -9,11 +9,16 @@ It uses Orshot's [Website Screenshot API](https://orshot.com/templates/website-s
 - Search `Orshot` in Raycast
 - Select between "Create Website Screenshot" and "Create Tweet Screenshot"
 - Enter Website or Tweet URL
-- Hit enter, it'll generate and save the image on your desktop
+- Hit enter, it'll generate and save the image to your chosen directory (Desktop by default)
 
 Free usage is rate-limited based on your IP, and you can generate 10 screenshots per 3 minutes
 
 You can get your API key from your [Orshot Dashboard](https://orshot.com) > Workspace Settings > API Key to generate more screenshots
+
+## Preferences
+
+- **API Key**: Optional API key to remove rate limits
+- **Save Directory**: Choose where to save screenshots (defaults to Desktop)
 
 ## Support
 
