@@ -32,7 +32,7 @@
     {
       "name": "create-website-screenshot",
       "title": "Create Website Screenshot",
-      "subtitle": "Enter a website url to create its screenshot",
+      "subtitle": "Orshot",
       "description": "Takes the user input url and generates screenshot of the link",
       "mode": "no-view",
       "arguments": [
