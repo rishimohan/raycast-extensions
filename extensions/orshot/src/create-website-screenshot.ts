@@ -1,4 +1,9 @@
-import { showToast, Toast, getPreferenceValues, LaunchProps } from "@raycast/api";
+import {
+  showToast,
+  Toast,
+  getPreferenceValues,
+  LaunchProps,
+} from "@raycast/api";
 import { writeFileSync } from "fs";
 import { join } from "path";
 import { homedir } from "os";
@@ -18,7 +23,9 @@ interface ApiResponse {
   error?: string;
 }
 
-export default async function Command(props: LaunchProps<{ arguments: Arguments }>) {
+export default async function Command(
+  props: LaunchProps<{ arguments: Arguments }>,
+) {
   let { websiteUrl } = props.arguments;
 
   if (!websiteUrl || websiteUrl.trim() === "") {
@@ -45,22 +52,25 @@ export default async function Command(props: LaunchProps<{ arguments: Arguments 
   try {
     const preferences = getPreferenceValues<Preferences>();
 
-    const response = await fetch("https://orshot.com/api/templates/make-playground-request", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        templateSlug: "website-screenshot",
-        modifications: {
-          websiteUrl: websiteUrl,
+    const response = await fetch(
+      "https://orshot.com/api/templates/make-playground-request",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        userAPIKey: preferences.apiKey,
-        responseType: "base64",
-        responseFormat: "png",
-        renderType: "images",
-      }),
-    });
+        body: JSON.stringify({
+          templateSlug: "website-screenshot",
+          modifications: {
+            websiteUrl: websiteUrl,
+          },
+          userAPIKey: preferences.apiKey,
+          responseType: "base64",
+          responseFormat: "png",
+          renderType: "images",
+        }),
+      },
+    );
 
     const data = (await response.json()) as ApiResponse;
 
@@ -96,7 +106,8 @@ export default async function Command(props: LaunchProps<{ arguments: Arguments 
     await showToast({
       style: Toast.Style.Failure,
       title: "Failed to Generate Screenshot",
-      message: error instanceof Error ? error.message : "Unknown error occurred",
+      message:
+        error instanceof Error ? error.message : "Unknown error occurred",
     });
   }
 }
